@@ -101,13 +101,29 @@ export const constantRoutes = [
     component: Layout,
     redirect: '/core/teacher/list',
     name: 'teacher',
-    meta: { title: '老师', icon: 'el-icon-s-help' },
+    meta: { title: '辅导员列表', icon: 'el-icon-s-help' },
     children: [
       {
         path: 'list',
         name: 'TeacherList',
         component: () => import('@/views/core/teacher/list'),
-        meta: { title: '老师列表', icon: 'table' }
+        meta: { title: '辅导员列表', icon: 'table' }
+      }
+    ]
+  },
+
+  {
+    path: '/core/class',
+    component: Layout,
+    redirect: '/core/class/list',
+    name: 'class',
+    meta: { title: '班级', icon: 'el-icon-s-help' },
+    children: [
+      {
+        path: 'list',
+        name: 'TeacherList',
+        component: () => import('@/views/core/class/list'),
+        meta: { title: '班级列表', icon: 'table' }
       }
     ]
   },
