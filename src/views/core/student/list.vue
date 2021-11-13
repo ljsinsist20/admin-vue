@@ -51,19 +51,17 @@
       </el-table-column>
       <el-table-column prop="departmentName" label="系">
       </el-table-column>
-      <!-- <el-table-column label="操作" align="center" width="200">
+
+      <el-table-column label="操作" align="center" width="200">
         <template slot-scope="scope">
-          <el-button v-if="scope.row.status == 1" type="primary" size="mini" @click="lock(scope.row.id, 0)">
-            锁定
+          <el-button type="danger" size="mini" @click="deleteById(scope.row.id)">
+            删除
           </el-button>
-          <el-button v-else type="danger" size="mini" @click="lock(scope.row.id, 1)">
-            解锁
-          </el-button>
-          <el-button type="primary" size="mini" @click="showLoginRecord(scope.row.id)">
-            登录日志
+          <el-button type="primary" size="mini" @click="show(scope.row.id)">
+            具体信息
           </el-button>
         </template>
-      </el-table-column>  -->
+      </el-table-column> 
     </el-table>
 
      <div class="block">
@@ -101,6 +99,15 @@ export default {
       {this.list = response.data.pageInfo.list, this.total = response.data.pageInfo.total})
     },
 
+    deleteById(id) {
+      studentsAPI.deleteById(id) .then((response) =>{
+        this.$message.success(response.message),
+        this.fetchData()
+      }).catch((error) =>{
+        this.$message.error(error.message)
+      })
+    },
+
     changeCurrentPage(pageNum) {
       this.pageNum = pageNum
       this.fetchData()
@@ -115,6 +122,8 @@ export default {
       this.searchObj = {}
       this.fetchData()
     }
+
+ 
   }
 }
 </script>

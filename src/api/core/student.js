@@ -7,5 +7,11 @@ export default {
             method: 'GET',
             params: searchObj
         })
+    },
+    deleteById(id) { 
+        return request({
+            url: `/core/student/delete/${id}`,
+            method: 'DELETE'
+        })
     }
 }

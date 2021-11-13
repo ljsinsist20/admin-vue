@@ -129,6 +129,22 @@ export const constantRoutes = [
   },
 
   {
+    path: '/core/department',
+    component: Layout,
+    redirect: '/core/department/list',
+    name: 'department',
+    meta: { title: '系', icon: 'el-icon-s-help' },
+    children: [
+      {
+        path: 'list',
+        name: 'DepartmentList',
+        component: () => import('@/views/core/class/list'),
+        meta: { title: '系列表', icon: 'table' }
+      }
+    ]
+  },
+
+  {
     path: '/core/dorm',
     component: Layout,
     redirect: '/core/dorm/list',
