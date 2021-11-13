@@ -7,5 +7,11 @@ export default {
             method: 'GET',
             params: searchObj
         })
+    },
+    queryDorm() {
+        return request({
+            url: '/core/dorm/findAll',
+            method: 'GET',
+        })
     }
 }

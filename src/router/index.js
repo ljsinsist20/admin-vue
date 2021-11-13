@@ -95,7 +95,7 @@ export const constantRoutes = [
     ]
   },
 
-  
+
   {
     path: '/core/teacher',
     component: Layout,
@@ -138,7 +138,7 @@ export const constantRoutes = [
       {
         path: 'list',
         name: 'DepartmentList',
-        component: () => import('@/views/core/class/list'),
+        component: () => import('@/views/core/department/list'),
         meta: { title: '系列表', icon: 'table' }
       }
     ]

@@ -1,10 +1,13 @@
 <template>
   <div class="app-container">
-      
+
     <el-form :inline="true" class="demo-form-inline">
       <el-form-item label="班级名称">
         <el-input v-model="searchObj.name" placeholder="班级名称"></el-input>
       </el-form-item>
+      <!-- <el-form-item label="辅导员姓名">
+        <el-input v-model="searchObj.teacherName" placeholder="辅导员姓名"></el-input>
+      </el-form-item> -->
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" @click="fetchData()">查询</el-button>
       </el-form-item>
@@ -21,16 +24,12 @@
       </el-table-column>
       <el-table-column prop="name" label="班级名称">
       </el-table-column>
+      <el-table-column prop="teacherName" label="辅导员姓名">
+      </el-table-column>
     </el-table>
-    
+
     <div class="block">
-      <el-pagination  @size-change="changePageSize" 
-                      @current-change="changeCurrentPage" 
-                      :current-page="pageNum" 
-                      :page-sizes="[5, 10, 20, 30]" 
-                      :page-size="pageSize" 
-                      layout="total, sizes, prev, pager, next, jumper" 
-                      :total="total">
+      <el-pagination @size-change="changePageSize" @current-change="changeCurrentPage" :current-page="pageNum" :page-sizes="[5, 10, 20, 30]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
       </el-pagination>
     </div>
 
@@ -38,10 +37,10 @@
 </template>
 
 <script>
-import classAPI from "@/api/core/class.js"
+import classAPI from '@/api/core/class.js'
 
 export default {
- data() {
+  data() {
     return {
       list: null,
       pageNum: 1,
@@ -50,26 +49,25 @@ export default {
       searchObj: {}
     }
   },
-  created(){
-      this.fetchData()
+  created() {
+    this.fetchData()
   },
 
   methods: {
-      fetchData() {
-          classAPI.list(this.pageNum, this.pageSize, this.searchObj) .then((response) => {
-              this.list = response.data.pageInfo.list
-              this.total = response.data.pageInfo.total
-          })
-      },
+    fetchData() {
+      classAPI.list(this.pageNum, this.pageSize, this.searchObj).then(response => {
+        this.list = response.data.pageInfo.list
+        this.total = response.data.pageInfo.total
+      })
+    },
 
-      resetData() {
-          this.searchObj = {}
-          this.fetchData()
-      }
+    resetData() {
+      this.searchObj = {}
+      this.fetchData()
+    }
   }
 }
 </script>
 
 <style>
-
 </style>

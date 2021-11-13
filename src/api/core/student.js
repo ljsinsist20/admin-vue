@@ -8,10 +8,17 @@ export default {
             params: searchObj
         })
     },
-    deleteById(id) { 
+    deleteById(id) {
         return request({
             url: `/core/student/delete/${id}`,
             method: 'DELETE'
+        })
+    },
+    add(addForm) {
+        return request({
+            url: '/core/student/add',
+            method: 'POST',
+            data: addForm
         })
     }
 }
