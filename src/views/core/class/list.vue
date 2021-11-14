@@ -26,6 +26,8 @@
       </el-table-column>
       <el-table-column prop="teacherName" label="辅导员姓名">
       </el-table-column>
+      <el-table-column prop="studentNum" label="班级人数">
+      </el-table-column>
     </el-table>
 
     <div class="block">

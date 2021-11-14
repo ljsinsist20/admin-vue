@@ -19,7 +19,10 @@
           {{ (pageNum - 1) * pageSize + scope.$index + 1 }}
         </template>
       </el-table-column>
-      <el-table-column prop="name" label="宿舍名称"></el-table-column>
+      <el-table-column prop="name" label="宿舍名称">
+      </el-table-column>
+      <el-table-column prop="studentNum" label="宿舍人数">
+      </el-table-column>
     </el-table>
     <div class="block">
       <el-pagination @size-change="changePageSize" @current-change="changeCurrentPage" :current-page="pageNum" :page-sizes="[5, 10, 20, 30]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
