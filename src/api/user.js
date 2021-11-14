@@ -2,8 +2,9 @@ import request from '@/utils/request'
 
 export function login(data) {
   return request({
-    baseURL: '/dev-api',
-    url: '/vue-admin-template/user/login',
+    // baseURL: '/dev-api',
+    // url: '/vue-admin-template/user/login',
+    url: '/admin/login',
     method: 'post',
     data
   })
