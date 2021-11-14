@@ -45,6 +45,18 @@ service.interceptors.response.use(
   response => {
     const res = response.data
 
+    //token验证不通过(springboot拦截器)
+    if (res.code === -211) {
+      Message({
+        message: res.message || 'Error',
+        type: 'error',
+        duration: 5 * 1000
+      })
+      store.dispatch('user/resetToken').then(() => {
+        location.reload()
+      })
+    }
+
     // if the custom code is not 20000, it is judged as an error.
     if (res.code === -1) {
       Message({
