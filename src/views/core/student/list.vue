@@ -108,8 +108,7 @@
       </span>
     </el-dialog>
 
-
-      <el-dialog title="更新用户" :visible.sync="updateVisible" width="50%">
+    <el-dialog title="更新用户" :visible.sync="updateVisible" width="50%">
       <!-- 内容的主体区域 -->
       <!-- :rules="addFormRules" -->
       <el-form ref="updateFormRef" :model="updateForm" label-width="70px">
@@ -151,7 +150,6 @@
 
 <script>
 import studentsAPI from '@/api/core/student.js'
-import teacherAPI from '@/api/core/teacher.js'
 import dormAPI from '@/api/core/dorm.js'
 import classAPI from '@/api/core/class.js'
 
@@ -172,9 +170,8 @@ export default {
         { id: 1, name: '女' }
       ],
       dormNameArr: [],
-      classNameArr: [], 
-      id: null,
-      hid: null,
+      classNameArr: [],
+      id: null
     }
   },
 
@@ -204,7 +201,7 @@ export default {
           })
         })
     },
-    
+
     deleteById(id) {
       studentsAPI
         .deleteById(id)
@@ -234,8 +231,8 @@ export default {
     //新增前的准备工作
     addBefore(flag) {
       if (flag) {
-         this.dialogVisible = true
-      }else{
+        this.dialogVisible = true
+      } else {
         this.updateVisible = true
       }
       // 查询宿舍列表
@@ -249,13 +246,13 @@ export default {
     },
     //新增学生信息
     add() {
-      if (this.addForm.name == null) {
+      if (this.addForm.name == null || this.addForm.name == '') {
         return this.$message.error('请输入学生姓名')
       }
       if (this.addForm.sex == null) {
         return this.$message.error('请选择性别')
       }
-      if (this.addForm.phone == null) {
+      if (this.addForm.phone == null || this.addForm.phone == '') {
         return this.$message.error('请输入手机号')
       }
       if (this.addForm.did == null) {
@@ -264,7 +261,6 @@ export default {
       if (this.addForm.cid == null) {
         return this.$message.error('请选择班级')
       }
-      console.log(this.addForm)
       studentsAPI
         .add(this.addForm)
         .then(response => {
@@ -278,20 +274,32 @@ export default {
     },
 
     show(id, hid) {
-      console.log(this.list[hid])
+      //因考虑不周全，故采取如下方法
       this.updateForm = JSON.parse(JSON.stringify(this.list[hid]))
-       //因考虑不周全，故采取如下方法
-      // if(updateForm.)
-      //
       this.id = id
       this.addBefore(false)
     },
 
     update() {
-      console.log(this.updateForm)
+      if (this.updateForm.name == null || this.updateForm.name == '') {
+        return this.$message.error('请输入学生姓名')
+      }
+      if (this.updateForm.sex == null) {
+        return this.$message.error('请选择性别')
+      }
+      if (this.updateForm.phone == null || this.updateForm.phone == '') {
+        return this.$message.error('请输入手机号')
+      }
+      if (this.updateForm.did == null) {
+        return this.$message.error('请选择宿舍')
+      }
+      if (this.updateForm.cid == null) {
+        return this.$message.error('请选择班级')
+      }
       studentsAPI.update(this.id, this.updateForm).then(response => {
-        this.$message.success(response.message), this.fetchData()
+        this.$message.success(response.message)
         this.updateVisible = false
+        this.fetchData()
       })
     }
   }

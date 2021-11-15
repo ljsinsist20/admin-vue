@@ -19,5 +19,19 @@ export default {
             url: `/core/teacher/delete/${id}`,
             method: 'DELETE'
         })
+    },
+    add(addForm) {
+        return request({
+            url: `/core/teacher/add`,
+            method: 'POST',
+            data: addForm
+        })
+    },
+    update(id, updateForm) {
+        return request({
+            url: `/core/teacher/update/${id}`,
+            method: 'PUT',
+            data: updateForm
+        })
     }
 }

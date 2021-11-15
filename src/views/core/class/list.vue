@@ -5,14 +5,17 @@
       <el-form-item label="班级名称">
         <el-input v-model="searchObj.name" placeholder="班级名称"></el-input>
       </el-form-item>
-      <!-- <el-form-item label="辅导员姓名">
+      <el-form-item label="辅导员姓名">
         <el-input v-model="searchObj.teacherName" placeholder="辅导员姓名"></el-input>
-      </el-form-item> -->
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" @click="fetchData()">查询</el-button>
       </el-form-item>
       <el-form-item>
         <el-button type="default" @click="resetData()">清除</el-button>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="success" icon="el-icon-search" @click="addBefore()">新增</el-button>
       </el-form-item>
     </el-form>
 
@@ -24,9 +27,21 @@
       </el-table-column>
       <el-table-column prop="name" label="班级名称">
       </el-table-column>
+      <el-table-column prop="departmentName" label="系名称">
+      </el-table-column>
       <el-table-column prop="teacherName" label="辅导员姓名">
       </el-table-column>
       <el-table-column prop="studentNum" label="班级人数">
+      </el-table-column>
+      <el-table-column label="操作" align="center" width="200">
+        <template slot-scope="scope">
+          <el-button type="danger" size="mini" @click="open(scope.row.id)">
+            删除
+          </el-button>
+          <el-button type="primary" size="mini" @click="show(scope.row.id, scope.$index)">
+            更新
+          </el-button>
+        </template>
       </el-table-column>
     </el-table>
 
@@ -35,11 +50,56 @@
       </el-pagination>
     </div>
 
+    <el-dialog title="添加用户" :visible.sync="dialogVisible" width="50%">
+      <!-- 内容的主体区域 -->
+      <!-- :rules="addFormRules" -->
+      <el-form ref="addFormRef" :model="addForm" label-width="90px">
+        <el-form-item label="班级名称" prop="name">
+          <el-input v-model="addForm.name"></el-input>
+        </el-form-item>
+        <el-form-item label="系" prop="departmentName">
+          <el-select v-model="addForm.deid" value-key="id">
+            <el-option v-for="item in departmentNameArr" :key="item.id" :label="item.name" :value="item.id"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="辅导员姓名" prop="teacherName">
+          <el-select v-model="addForm.tid" value-key="id">
+            <el-option v-for="item in teacherNameArr" :key="item.id" :label="item.name" :value="item.id"></el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <!-- 底部区域 -->
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="add()">确 定</el-button>
+      </span>
+    </el-dialog>
+
+    <el-dialog title="更新用户" :visible.sync="updateVisible" width="50%">
+      <!-- 内容的主体区域 -->
+      <!-- :rules="addFormRules" -->
+      <el-form ref="updateFormRef" :model="updateForm" label-width="90px">
+        <el-form-item label="辅导员姓名" prop="name">
+          <el-input v-model="updateForm.name"></el-input>
+        </el-form-item>
+        <el-form-item label="手机号" prop="phone">
+          <el-input v-model="updateForm.phone"></el-input>
+        </el-form-item>
+      </el-form>
+      <!-- 底部区域 -->
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="updateVisible = false">取 消</el-button>
+        <el-button type="primary" @click="update()">确 定</el-button>
+      </span>
+    </el-dialog>
+
   </div>
 </template>
 
 <script>
 import classAPI from '@/api/core/class.js'
+import teacherAPI from '@/api/core/teacher.js'
+import departmentAPI from '@/api/core/department.js'
 
 export default {
   data() {
@@ -48,7 +108,13 @@ export default {
       pageNum: 1,
       pageSize: 10,
       total: 0,
-      searchObj: {}
+      searchObj: {},
+      dialogVisible: false,
+      updateVisible: false,
+      addForm: {},
+      updateForm: {},
+      teacherNameArr: [],
+      departmentNameArr: []
     }
   },
   created() {
@@ -66,6 +132,58 @@ export default {
     resetData() {
       this.searchObj = {}
       this.fetchData()
+    },
+
+    open(id) {
+      this.$confirm('此操作将永久删除该班级记录, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(() => {
+          this.deleteById(id)
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          })
+        })
+    },
+    deleteById(id) {
+      classAPI.deleteById(id).then(response => {
+        this.$message.success(response.message)
+        this.fetchData()
+      })
+    },
+
+    addBefore() {
+      this.dialogVisible = true
+      teacherAPI.queryTeacher().then(response => {
+        this.teacherNameArr = response.data.teacherNameArr
+      })
+      departmentAPI.queryDepartment().then(response => {
+        this.departmentNameArr = response.data.departmentNameArr
+      })
+    },
+
+    add() {
+      if (this.addForm.name == null || this.addForm.name == '') {
+        return this.$message.error('请输入班级姓名')
+      }
+      if (this.addForm.tid == null) {
+        return this.$message.error('请选择辅导员')
+      }
+      classAPI
+        .add(this.addForm)
+        .then(response => {
+          this.$message.success(response.message), this.fetchData()
+          this.dialogVisible = false
+          this.addForm = {}
+        })
+        .catch(error => {
+          this.$message.error(error.message)
+        })
     }
   }
 }
