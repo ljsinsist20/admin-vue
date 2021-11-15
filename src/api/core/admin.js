@@ -21,5 +21,13 @@ export default {
             url: `/core/admin/delete/${id}`,
             method: 'DELETE'
         })
+    },
+
+    query() {
+        return request({
+            url: '/core/admin/query',
+            method: 'GET'
+        })
     }
+
 }

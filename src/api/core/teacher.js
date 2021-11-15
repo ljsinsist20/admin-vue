@@ -13,5 +13,11 @@ export default {
             url: '/core/teacher/findAll',
             method: 'GET'
         })
+    },
+    deleteById(id) {
+        return request({
+            url: `/core/teacher/delete/${id}`,
+            method: 'DELETE'
+        })
     }
 }

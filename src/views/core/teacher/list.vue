@@ -29,6 +29,16 @@
       </el-table-column>
       <el-table-column prop="phone" label="手机号">
       </el-table-column>
+    <el-table-column label="操作" align="center" width="200">
+        <template slot-scope="scope">
+          <el-button type="danger" size="mini" @click="open(scope.row.id)">
+            删除
+          </el-button>
+          <el-button type="primary" size="mini" @click="show(scope.row.id, scope.$index)">
+            更新
+          </el-button>
+        </template>
+      </el-table-column>
     </el-table>
     
     <div class="block">
@@ -41,6 +51,9 @@
                       :total="total">
       </el-pagination>
     </div>
+
+    
+
   </div>
 </template>
 
@@ -53,7 +66,13 @@ export default {
       pageNum: 1,
       pageSize: 10,
       total: 0,
-      searchObj: {}
+      searchObj: {},
+      sexArr: [
+        { id: 0, name: '男' },
+        { id: 1, name: '女' }
+      ],
+      dormNameArr: [],
+      classNameArr: [], 
     }
   },
 
@@ -65,6 +84,30 @@ export default {
     fetchData() {
       teacherAPI.list(this.pageNum, this.pageSize, this.searchObj).then((response) => 
       {this.list = response.data.pageInfo.list, this.total = response.data.pageInfo.total})
+    },
+
+    open(id) {
+      console.log(id)
+      this.$confirm('此操作将永久删除该老师记录, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(() => {
+          this.deleteById(id)
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          })
+        })
+    },
+
+    deleteById(id) {
+      teacherAPI.deleteById(id) .then(response => {
+          this.$message.success(response.message), this.fetchData()
+        })
     },
 
     changeCurrentPage(pageNum) {

@@ -64,6 +64,24 @@ const actions = {
   //   })
   // },
 
+  query({commit, state}) {
+    return new Promise((resolve, reject) => {
+      query(state.token).then(response => {
+        const { data } = response
+        if (!data) {
+          return reject('验证失败，请重新登陆!')
+        }
+        
+        const { name } = data
+        commit('SET_NAME', name)
+
+        resolve(data)         
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
+
   // user logout
   logout({ commit, state }) {
     return new Promise((resolve, reject) => {

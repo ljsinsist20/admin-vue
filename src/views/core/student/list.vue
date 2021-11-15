@@ -26,7 +26,7 @@
         <el-button type="default" @click="resetData()">清除</el-button>
       </el-form-item>
       <el-form-item>
-        <el-button type="success" icon="el-icon-search" @click="addBefore()">新增</el-button>
+        <el-button type="success" icon="el-icon-search" @click="addBefore(true)">新增</el-button>
       </el-form-item>
     </el-form>
 
@@ -60,8 +60,8 @@
           <el-button type="danger" size="mini" @click="open(scope.row.id)">
             删除
           </el-button>
-          <el-button type="primary" size="mini" @click="show(scope.row.id)">
-            具体信息
+          <el-button type="primary" size="mini" @click="show(scope.row.id, scope.$index)">
+            更新
           </el-button>
         </template>
       </el-table-column>
@@ -88,20 +88,14 @@
           <el-input v-model="addForm.phone"></el-input>
         </el-form-item>
 
-        <el-form-item label="辅导员" prop="teacherName">
-          <el-select v-model="addForm.teacherName" value-key="id">
-            <el-option v-for="item in teacherNameArr" :key="item.id" :label="item.name" :value="item.id"></el-option>
-          </el-select>
-        </el-form-item>
-
         <el-form-item label="宿舍" prop="dormName">
-          <el-select v-model="addForm.dormName" value-key="id">
+          <el-select v-model="addForm.did" value-key="id">
             <el-option v-for="item in dormNameArr" :key="item.id" :label="item.name" :value="item.id"></el-option>
           </el-select>
         </el-form-item>
 
         <el-form-item label="班级" prop="class">
-          <el-select v-model="addForm.className" value-key="id">
+          <el-select v-model="addForm.cid" value-key="id">
             <el-option v-for="item in classNameArr" :key="item.id" :label="item.name" :value="item.id"></el-option>
           </el-select>
         </el-form-item>
@@ -111,6 +105,45 @@
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
         <el-button type="primary" @click="add()">确 定</el-button>
+      </span>
+    </el-dialog>
+
+
+      <el-dialog title="更新用户" :visible.sync="updateVisible" width="50%">
+      <!-- 内容的主体区域 -->
+      <!-- :rules="addFormRules" -->
+      <el-form ref="updateFormRef" :model="updateForm" label-width="70px">
+        <el-form-item label="学生姓名" prop="name">
+          <el-input v-model="updateForm.name"></el-input>
+        </el-form-item>
+
+        <el-form-item label="性别" prop="sex">
+          <el-select v-model="updateForm.sex" value-key="id">
+            <el-option v-for="item in sexArr" :key="item.id" :label="item.name" :value="item.id"></el-option>
+          </el-select>
+        </el-form-item>
+
+        <el-form-item label="手机号" prop="phone">
+          <el-input v-model="updateForm.phone"></el-input>
+        </el-form-item>
+
+        <el-form-item label="宿舍" prop="dormName">
+          <el-select v-model="updateForm.did" value-key="id">
+            <el-option v-for="item in dormNameArr" :key="item.id" :label="item.name" :value="item.id"></el-option>
+          </el-select>
+        </el-form-item>
+
+        <el-form-item label="班级" prop="class">
+          <el-select v-model="updateForm.cid" value-key="id">
+            <el-option v-for="item in classNameArr" :key="item.id" :label="item.name" :value="item.id"></el-option>
+          </el-select>
+        </el-form-item>
+
+      </el-form>
+      <!-- 底部区域 -->
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="updateVisible = false">取 消</el-button>
+        <el-button type="primary" @click="update()">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -131,14 +164,17 @@ export default {
       total: 0,
       searchObj: {},
       dialogVisible: false,
+      updateVisible: false,
       addForm: {},
+      updateForm: {},
       sexArr: [
         { id: 0, name: '男' },
         { id: 1, name: '女' }
       ],
-      teacherNameArr: [],
       dormNameArr: [],
-      classNameArr: []
+      classNameArr: [], 
+      id: null,
+      hid: null,
     }
   },
 
@@ -160,10 +196,6 @@ export default {
       })
         .then(() => {
           this.deleteById(id)
-          // this.$message({
-          //   type: 'success',
-          //   message: '删除成功!'
-          // })
         })
         .catch(() => {
           this.$message({
@@ -172,6 +204,7 @@ export default {
           })
         })
     },
+    
     deleteById(id) {
       studentsAPI
         .deleteById(id)
@@ -199,12 +232,12 @@ export default {
     },
 
     //新增前的准备工作
-    addBefore() {
-      this.dialogVisible = true
-      // 查询老师列表
-      teacherAPI.queryTeacher().then(response => {
-        this.teacherNameArr = response.data.teacherNameArr
-      })
+    addBefore(flag) {
+      if (flag) {
+         this.dialogVisible = true
+      }else{
+        this.updateVisible = true
+      }
       // 查询宿舍列表
       dormAPI.queryDorm().then(response => {
         this.dormNameArr = response.data.dormNameArr
@@ -225,15 +258,13 @@ export default {
       if (this.addForm.phone == null) {
         return this.$message.error('请输入手机号')
       }
-      if (this.addForm.teacherName == null) {
-        return this.$message.error('请选择辅导员')
-      }
-      if (this.addForm.dormName == null) {
+      if (this.addForm.did == null) {
         return this.$message.error('请选择宿舍')
       }
-      if (this.addForm.className == null) {
+      if (this.addForm.cid == null) {
         return this.$message.error('请选择班级')
       }
+      console.log(this.addForm)
       studentsAPI
         .add(this.addForm)
         .then(response => {
@@ -244,6 +275,24 @@ export default {
         .catch(error => {
           this.$message.error(error.message)
         })
+    },
+
+    show(id, hid) {
+      console.log(this.list[hid])
+      this.updateForm = JSON.parse(JSON.stringify(this.list[hid]))
+       //因考虑不周全，故采取如下方法
+      // if(updateForm.)
+      //
+      this.id = id
+      this.addBefore(false)
+    },
+
+    update() {
+      console.log(this.updateForm)
+      studentsAPI.update(this.id, this.updateForm).then(response => {
+        this.$message.success(response.message), this.fetchData()
+        this.updateVisible = false
+      })
     }
   }
 }
