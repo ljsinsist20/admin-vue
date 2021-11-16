@@ -13,5 +13,18 @@ export default {
             url: `/core/department/findAll`,
             method: 'GET'
         })
+    },
+    deleteById(id) {
+        return request({
+            url: `/core/department/delete/${id}`,
+            method: 'DELETE'
+        })
+    },
+    add(addForm) {
+        return request({
+            url: `/core/department/add/`,
+            method: 'POST',
+            data: addForm
+        })
     }
 }

@@ -8,6 +8,9 @@
       <el-form-item label="辅导员姓名">
         <el-input v-model="searchObj.teacherName" placeholder="辅导员姓名"></el-input>
       </el-form-item>
+      <el-form-item label="系名称">
+        <el-input v-model="searchObj.departmentName" placeholder="系名称"></el-input>
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" @click="fetchData()">查询</el-button>
       </el-form-item>
@@ -15,7 +18,7 @@
         <el-button type="default" @click="resetData()">清除</el-button>
       </el-form-item>
       <el-form-item>
-        <el-button type="success" icon="el-icon-search" @click="addBefore()">新增</el-button>
+        <el-button type="success" icon="el-icon-search" @click="addBefore(true)">新增</el-button>
       </el-form-item>
     </el-form>
 
@@ -79,11 +82,18 @@
       <!-- 内容的主体区域 -->
       <!-- :rules="addFormRules" -->
       <el-form ref="updateFormRef" :model="updateForm" label-width="90px">
-        <el-form-item label="辅导员姓名" prop="name">
+          <el-form-item label="班级名称" prop="name">
           <el-input v-model="updateForm.name"></el-input>
         </el-form-item>
-        <el-form-item label="手机号" prop="phone">
-          <el-input v-model="updateForm.phone"></el-input>
+        <el-form-item label="系" prop="departmentName">
+          <el-select v-model="updateForm.deid" value-key="id">
+            <el-option v-for="item in departmentNameArr" :key="item.id" :label="item.name" :value="item.id"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="辅导员姓名" prop="teacherName">
+          <el-select v-model="updateForm.tid" value-key="id">
+            <el-option v-for="item in teacherNameArr" :key="item.id" :label="item.name" :value="item.id"></el-option>
+          </el-select>
         </el-form-item>
       </el-form>
       <!-- 底部区域 -->
@@ -114,7 +124,8 @@ export default {
       addForm: {},
       updateForm: {},
       teacherNameArr: [],
-      departmentNameArr: []
+      departmentNameArr: [],
+      id: null
     }
   },
   created() {
@@ -157,8 +168,13 @@ export default {
       })
     },
 
-    addBefore() {
-      this.dialogVisible = true
+    addBefore(flag) {
+      if(flag) {
+        this.dialogVisible = true
+      }else {
+        this.updateVisible = true
+      }
+      
       teacherAPI.queryTeacher().then(response => {
         this.teacherNameArr = response.data.teacherNameArr
       })
@@ -174,6 +190,9 @@ export default {
       if (this.addForm.tid == null) {
         return this.$message.error('请选择辅导员')
       }
+      if (this.addForm.deid == null) {
+        return this.$message.error('请选择系')
+      }
       classAPI
         .add(this.addForm)
         .then(response => {
@@ -184,6 +203,29 @@ export default {
         .catch(error => {
           this.$message.error(error.message)
         })
+    },
+
+    show(id, hid) {
+      this.updateForm = JSON.parse(JSON.stringify(this.list[hid]))
+      this.id = id
+      this.addBefore(false)
+    },
+
+     update() {
+     if (this.updateForm.name == null || this.updateForm.name == '') {
+        return this.$message.error('请输入班级姓名')
+      }
+      if (this.updateForm.tid == null) {
+        return this.$message.error('请选择辅导员')
+      }
+      if (this.updateForm.deid == null) {
+        return this.$message.error('请选择系')
+      }
+      classAPI.update(this.id, this.updateForm).then(response => {
+        this.$message.success(response.message)
+        this.updateVisible = false
+        this.fetchData()
+      })
     }
   }
 }

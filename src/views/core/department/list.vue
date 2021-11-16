@@ -11,6 +11,9 @@
       <el-form-item>
         <el-button type="default" @click="resetData()">清除</el-button>
       </el-form-item>
+      <el-form-item>
+        <el-button type="success" icon="el-icon-search" @click="addBefore()">新增</el-button>
+      </el-form-item>
     </el-form>
 
     <el-table :data="list" border style="width: 100%" stripe>
@@ -20,11 +23,60 @@
         </template>
       </el-table-column>
       <el-table-column prop="name" label="系名称"></el-table-column>
+      <el-table-column label="操作" align="center" width="200">
+        <template slot-scope="scope">
+          <el-button type="danger" size="mini" @click="open(scope.row.id)">
+            删除
+          </el-button>
+          <el-button type="primary" size="mini" @click="show(scope.row.id, scope.$index)">
+            更新
+          </el-button>
+        </template>
+      </el-table-column>
     </el-table>
     <div class="block">
       <el-pagination @size-change="changePageSize" @current-change="changeCurrentPage" :current-page="pageNum" :page-sizes="[5, 10, 20, 30]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
       </el-pagination>
     </div>
+
+
+
+
+     <el-dialog title="添加用户" :visible.sync="dialogVisible" width="50%">
+      <!-- 内容的主体区域 -->
+      <!-- :rules="addFormRules" -->
+      <el-form ref="addFormRef" :model="addForm" label-width="90px">
+        <el-form-item label="系名称" prop="name">
+          <el-input v-model="addForm.name"></el-input>
+        </el-form-item>
+    
+      </el-form>
+      <!-- 底部区域 -->
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="add()">确 定</el-button>
+      </span>
+    </el-dialog>
+
+    <el-dialog title="更新用户" :visible.sync="updateVisible" width="50%">
+      <!-- 内容的主体区域 -->
+      <!-- :rules="addFormRules" -->
+      <el-form ref="updateFormRef" :model="updateForm" label-width="90px">
+        <el-form-item label="系名称" prop="name">
+          <el-input v-model="updateForm.name"></el-input>
+        </el-form-item>
+      </el-form>
+      <!-- 底部区域 -->
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="updateVisible = false">取 消</el-button>
+        <el-button type="primary" @click="update()">确 定</el-button>
+      </span>
+    </el-dialog>
+
+    
+
+
+
   </div>
 </template>
 
@@ -38,7 +90,12 @@ export default {
       pageNum: 1,
       pageSize: 10,
       total: 0,
-      searchObj: {}
+      searchObj: {},
+      dialogVisible: false,
+      updateVisible: false,
+      addForm: {},
+      updateForm: {},
+      id: null
     }
   },
 
@@ -61,7 +118,44 @@ export default {
     changePageSize(pageSize) {
       this.pageSize = pageSize
       this.fetchData()
-    }
+    },
+
+   open(id) {
+      this.$confirm('此操作将永久删除该系记录, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(() => {
+          this.deleteById(id)
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          })
+        })
+    },
+    deleteById(id) {
+      departmentAPI.deleteById(id).then(response => {
+        this.$message.success(response.message)
+        this.fetchData()
+      })
+    },
+    addBefore() {
+      this.addForm = {}
+      this.dialogVisible = true
+    },
+    add() {
+      if(this.addForm.name == null || this.addForm.name == ''){
+        return this.$message.error('请输入系名称')
+      }
+      departmentAPI.add(this.addForm).then(response => {
+        this.$message.success(response.message)
+        this.dialogVisible = false
+        this.fetchData()
+      })
+    } 
   }
 }
 </script>

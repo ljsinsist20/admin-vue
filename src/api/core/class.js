@@ -26,5 +26,13 @@ export default {
             method: 'POST',
             data: addForm
         })
+    },
+
+    update(id, updateForm) {
+        return request({
+            url: `/core/class/update/${id}`,
+            method: 'PUT',
+            data: updateForm
+        })
     }
 }
