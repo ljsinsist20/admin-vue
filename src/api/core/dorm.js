@@ -13,5 +13,27 @@ export default {
             url: '/core/dorm/findAll',
             method: 'GET',
         })
+    },
+
+    deleteById(id) {
+        return request({
+            url: `/core/dorm/delete/${id}`,
+            method: 'DELETE'
+        })
+    },
+
+    add(addForm) {
+        return request({
+            url: `/core/dorm/add/`,
+            method: 'POST',
+            data: addForm
+        })
+    },
+    update(id, updateForm) {
+        return request({
+            url: `/core/dorm/update/${id}`,
+            method: 'PUT',
+            data: updateForm
+        })
     }
 }

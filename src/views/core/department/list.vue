@@ -39,17 +39,14 @@
       </el-pagination>
     </div>
 
-
-
-
-     <el-dialog title="添加用户" :visible.sync="dialogVisible" width="50%">
+    <el-dialog title="添加用户" :visible.sync="dialogVisible" width="50%">
       <!-- 内容的主体区域 -->
       <!-- :rules="addFormRules" -->
       <el-form ref="addFormRef" :model="addForm" label-width="90px">
         <el-form-item label="系名称" prop="name">
           <el-input v-model="addForm.name"></el-input>
         </el-form-item>
-    
+
       </el-form>
       <!-- 底部区域 -->
       <span slot="footer" class="dialog-footer">
@@ -72,10 +69,6 @@
         <el-button type="primary" @click="update()">确 定</el-button>
       </span>
     </el-dialog>
-
-    
-
-
 
   </div>
 </template>
@@ -120,7 +113,7 @@ export default {
       this.fetchData()
     },
 
-   open(id) {
+    open(id) {
       this.$confirm('此操作将永久删除该系记录, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -142,12 +135,13 @@ export default {
         this.fetchData()
       })
     },
+
     addBefore() {
       this.addForm = {}
       this.dialogVisible = true
     },
     add() {
-      if(this.addForm.name == null || this.addForm.name == ''){
+      if (this.addForm.name == null || this.addForm.name == '') {
         return this.$message.error('请输入系名称')
       }
       departmentAPI.add(this.addForm).then(response => {
@@ -155,7 +149,22 @@ export default {
         this.dialogVisible = false
         this.fetchData()
       })
-    } 
+    },
+    show(id, hid) {
+      this.updateForm = JSON.parse(JSON.stringify(this.list[hid]))
+      this.id = id
+      this.updateVisible = true
+    },
+    update() {
+      if (this.updateForm.name == null || this.updateForm.name == '') {
+        return this.$message.error('请输入系名称')
+      }
+      departmentAPI.update(this.id, this.updateForm).then(response => {
+        this.$message.success(response.message)
+        this.updateVisible = false
+        this.fetchData()
+      })
+    }
   }
 }
 </script>
