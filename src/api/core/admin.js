@@ -23,11 +23,11 @@ export default {
         })
     },
 
-    query() {
-        return request({
-            url: '/core/admin/query',
-            method: 'GET'
-        })
-    }
+    // query() {
+    //     return request({
+    //         url: '/core/admin/query',
+    //         method: 'GET'
+    //     })
+    // }
 
 }

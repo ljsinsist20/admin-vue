@@ -12,9 +12,8 @@ export function login(data) {
 
 export function getInfo(token) {
   return request({
-    baseURL: '/dev-api',
-    url: '/vue-admin-template/user/info',
-    method: 'get',
+    url: '/admin/query',
+    method: 'GET',
     params: { token }
   })
 }

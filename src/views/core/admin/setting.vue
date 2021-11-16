@@ -1,15 +1,12 @@
 <template>
   <div>
-      设置
+    管理员操作日志
   </div>
 </template>
 
 <script>
-export default {
-
-}
+export default {}
 </script>
 
 <style>
-
 </style>

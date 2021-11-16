@@ -44,38 +44,41 @@ const actions = {
   },
 
   // get user info
-  // getInfo({ commit, state }) {
-  //   return new Promise((resolve, reject) => {
-  //     getInfo(state.token).then(response => {
-  //       const { data } = response
+  getInfo({ commit, state }) {
+    return new Promise((resolve, reject) => {
+      getInfo(state.token).then(response => {
+        const { data } = response
 
-  //       if (!data) {
-  //         return reject('验证失败，请重新登陆!')
-  //       }
+        if (!data) {
+          return reject('验证失败，请重新登陆!')
+        }
 
-  //       const { name, avatar } = data
+        // const { name, avatar } = data
 
-  //       commit('SET_NAME', name)
-  //       commit('SET_AVATAR', avatar)
-  //       resolve(data)
-  //     }).catch(error => {
-  //       reject(error)
-  //     })
-  //   })
-  // },
+        this.name = data.userName
+        this.avatar = null
 
-  query({commit, state}) {
+        commit('SET_NAME', this.name)
+        commit('SET_AVATAR', this.avatar)
+        resolve(data)
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
+
+  query({ commit, state }) {
     return new Promise((resolve, reject) => {
       query(state.token).then(response => {
         const { data } = response
         if (!data) {
           return reject('验证失败，请重新登陆!')
         }
-        
+
         const { name } = data
         commit('SET_NAME', name)
 
-        resolve(data)         
+        resolve(data)
       }).catch(error => {
         reject(error)
       })

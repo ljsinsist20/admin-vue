@@ -55,30 +55,6 @@ export const constantRoutes = [
     }]
   },
 
-  // {
-  //   path: '/example',
-  //   component: Layout,
-  //   redirect: '/example/table',
-  //   name: 'Example',
-  //   meta: { title: 'Example', icon: 'el-icon-s-help' },
-  //   children: [
-  //     {
-  //       path: 'table',
-  //       name: 'Table',
-  //       component: () => import('@/views/table/index'),
-  //       meta: { title: 'Table', icon: 'table' }
-  //     },
-  //     {
-  //       path: 'tree',
-  //       name: 'Tree',
-  //       component: () => import('@/views/tree/index'),
-  //       meta: { title: 'Tree', icon: 'tree' }
-  //     }
-  //   ]
-  // },
-
-
-
   {
     path: '/core/student',
     component: Layout,
@@ -183,7 +159,7 @@ export const constantRoutes = [
         path: 'setting',
         name: 'settingList',
         component: () => import('@/views/core/admin/setting'),
-        meta: { title: '管理员设置', icon: 'table' }
+        meta: { title: '管理员日志', icon: 'table' }
       }
     ]
   },
