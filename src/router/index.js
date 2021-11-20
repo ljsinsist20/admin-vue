@@ -97,7 +97,7 @@ export const constantRoutes = [
     children: [
       {
         path: 'list',
-        name: 'TeacherList',
+        name: 'ClassList',
         component: () => import('@/views/core/class/list'),
         meta: { title: '班级列表', icon: 'table' }
       }

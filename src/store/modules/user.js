@@ -48,36 +48,14 @@ const actions = {
     return new Promise((resolve, reject) => {
       getInfo(state.token).then(response => {
         const { data } = response
-
         if (!data) {
           return reject('验证失败，请重新登陆!')
         }
-
         // const { name, avatar } = data
-
         this.name = data.userName
         this.avatar = null
-
         commit('SET_NAME', this.name)
         commit('SET_AVATAR', this.avatar)
-        resolve(data)
-      }).catch(error => {
-        reject(error)
-      })
-    })
-  },
-
-  query({ commit, state }) {
-    return new Promise((resolve, reject) => {
-      query(state.token).then(response => {
-        const { data } = response
-        if (!data) {
-          return reject('验证失败，请重新登陆!')
-        }
-
-        const { name } = data
-        commit('SET_NAME', name)
-
         resolve(data)
       }).catch(error => {
         reject(error)

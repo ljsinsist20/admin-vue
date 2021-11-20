@@ -50,10 +50,6 @@ export default {
     ...mapGetters(['sidebar', 'avatar'])
   },
 
-  created() {
-    this.query()
-  },
-
   methods: {
     toggleSideBar() {
       this.$store.dispatch('app/toggleSideBar')
@@ -62,13 +58,6 @@ export default {
       await this.$store.dispatch('user/logout')
       this.$router.push(`/login?redirect=${this.$route.fullPath}`)
     }
-
-    // async query() {
-    //   //   await AdminAPI.query().then((response) => {
-    //   //      this.userName = response.data.userName
-    //   // })
-    //   // await this.$store.dispatch('/user/query')
-    // }
   }
 }
 </script>

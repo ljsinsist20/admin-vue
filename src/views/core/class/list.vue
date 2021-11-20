@@ -82,7 +82,7 @@
       <!-- 内容的主体区域 -->
       <!-- :rules="addFormRules" -->
       <el-form ref="updateFormRef" :model="updateForm" label-width="90px">
-          <el-form-item label="班级名称" prop="name">
+        <el-form-item label="班级名称" prop="name">
           <el-input v-model="updateForm.name"></el-input>
         </el-form-item>
         <el-form-item label="系" prop="departmentName">
@@ -140,6 +140,16 @@ export default {
       })
     },
 
+    changeCurrentPage(pageNum) {
+      this.pageNum = pageNum
+      this.fetchData()
+    },
+
+    changePageSize(pageSize) {
+      this.pageSize = pageSize
+      this.fetchData()
+    },
+
     resetData() {
       this.searchObj = {}
       this.fetchData()
@@ -169,12 +179,12 @@ export default {
     },
 
     addBefore(flag) {
-      if(flag) {
+      if (flag) {
         this.dialogVisible = true
-      }else {
+      } else {
         this.updateVisible = true
       }
-      
+
       teacherAPI.queryTeacher().then(response => {
         this.teacherNameArr = response.data.teacherNameArr
       })
@@ -211,8 +221,8 @@ export default {
       this.addBefore(false)
     },
 
-     update() {
-     if (this.updateForm.name == null || this.updateForm.name == '') {
+    update() {
+      if (this.updateForm.name == null || this.updateForm.name == '') {
         return this.$message.error('请输入班级姓名')
       }
       if (this.updateForm.tid == null) {
