@@ -6,7 +6,8 @@ const getDefaultState = () => {
   return {
     token: getToken(),
     name: '',
-    avatar: ''
+    // avatar: '',
+    roles: [],
   }
 }
 
@@ -24,6 +25,9 @@ const mutations = {
   },
   SET_AVATAR: (state, avatar) => {
     state.avatar = avatar
+  },
+  SET_ROLES: (state, roles) => {
+    state.roles = roles
   }
 }
 
@@ -52,10 +56,13 @@ const actions = {
           return reject('验证失败，请重新登陆!')
         }
         // const { name, avatar } = data
-        this.name = data.userName
-        this.avatar = null
+        // console.log(data)
+        this.name = data.userAll.userName
+        this.roles = data.userAll.roles
+        // this.avatar = null
         commit('SET_NAME', this.name)
-        commit('SET_AVATAR', this.avatar)
+        commit('SET_ROLES', this.roles)
+        // commit('SET_AVATAR', this.avatar)
         resolve(data)
       }).catch(error => {
         reject(error)

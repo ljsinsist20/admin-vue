@@ -10,7 +10,7 @@ NProgress.configure({ showSpinner: false }) // NProgress Configuration
 
 const whiteList = ['/login'] // no redirect whitelist
 
-router.beforeEach(async(to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   // start progress bar
   NProgress.start()
 
@@ -32,13 +32,23 @@ router.beforeEach(async(to, from, next) => {
       } else {
         try {
           // get user info
-          await store.dispatch('user/getInfo')
+          const data = await store.dispatch('user/getInfo')
+          const roles = data.userAll.roles
+
+          // generate accessible routes map based on roles
+          //这里从permission/generateRoutes拿到路由
+          const accessRoutes = await store.dispatch('permission/generateRoutes', roles)
+          //刷新路由
+          router.options.routes = store.getters.permission_routes
+          // dynamically add accessible routes
+          router.addRoutes(accessRoutes)
 
           next()
         } catch (error) {
           // remove token and go to login page to re-login
           await store.dispatch('user/resetToken')
-          Message.error(error || 'Has Error')
+          // Message.error(error || 'Has Error')
+          Message.error({ message: error || 'Has Error' })
           next(`/login?redirect=${to.path}`)
           NProgress.done()
         }

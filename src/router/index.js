@@ -142,25 +142,51 @@ export const constantRoutes = [
     ]
   },
 
+  // {
+  //   path: '/core/admin',
+  //   component: Layout,
+  //   redirect: '/core/admin/list',
+  //   name: 'admin',
+  //   meta: { title: '管理员', icon: 'el-icon-s-help' },
+  //   children: [
+  //     {
+  //       path: 'list',
+  //       name: 'adminList',
+  //       component: () => import('@/views/core/admin/list'),
+  //       meta: { title: '管理员列表', icon: 'table' }
+  //     },
+  //     {
+  //       path: 'setting',
+  //       name: 'settingList',
+  //       component: () => import('@/views/core/admin/setting'),
+  //       meta: { title: '管理员日志', icon: 'table' }
+  //     }
+  //   ]
+  // },
+  // 404 page must be placed at the end !!!
+  // { path: '*', redirect: '/404', hidden: true }
+]
+
+export const asyncRoutes = [
   {
     path: '/core/admin',
     component: Layout,
     redirect: '/core/admin/list',
     name: 'admin',
-    meta: { title: '管理员', icon: 'el-icon-s-help' },
+    meta: { title: '管理员', icon: 'el-icon-s-help', roles: 'administrator' },
     children: [
       {
         path: 'list',
         name: 'adminList',
         component: () => import('@/views/core/admin/list'),
-        meta: { title: '管理员列表', icon: 'table' }
+        meta: { title: '管理员列表', icon: 'table', roles: ['administrator'] }
       },
-      {
-        path: 'setting',
-        name: 'settingList',
-        component: () => import('@/views/core/admin/setting'),
-        meta: { title: '管理员日志', icon: 'table' }
-      }
+      // {
+      //   path: 'setting',
+      //   name: 'settingList',
+      //   component: () => import('@/views/core/admin/setting'),
+      //   meta: { title: '管理员日志', icon: 'table' }
+      // }
     ]
   },
   // 404 page must be placed at the end !!!
