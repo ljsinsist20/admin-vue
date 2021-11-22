@@ -15,6 +15,12 @@
       </el-table-column>
       <el-table-column prop="userName" label="管理员姓名">
       </el-table-column>
+      <el-table-column prop="role" label="权限">
+        <template slot-scope="scope">
+          <el-tag v-if="scope.row.role === 'administrator'" type="warning">超级管理员</el-tag>
+          <el-tag v-if="scope.row.role === 'common'">普通用户</el-tag>
+        </template>
+      </el-table-column>
 
       <el-table-column label="操作" align="center" width="200">
         <template slot-scope="scope">

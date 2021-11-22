@@ -60,13 +60,13 @@ export const constantRoutes = [
     component: Layout,
     redirect: '/core/student/list',
     name: 'student',
-    meta: { title: '学生', icon: 'el-icon-s-help' },
+    meta: { title: '学生', icon: 'el-icon-user-solid' },
     children: [
       {
         path: 'list',
         name: 'StudentList',
         component: () => import('@/views/core/student/list'),
-        meta: { title: '学生列表', icon: 'table' }
+        meta: { title: '学生列表', icon: 'el-icon-user-solid' }
       }
     ]
   },
@@ -77,13 +77,13 @@ export const constantRoutes = [
     component: Layout,
     redirect: '/core/teacher/list',
     name: 'teacher',
-    meta: { title: '辅导员列表', icon: 'el-icon-s-help' },
+    meta: { title: '辅导员列表', icon: 'el-icon-s-custom' },
     children: [
       {
         path: 'list',
         name: 'TeacherList',
         component: () => import('@/views/core/teacher/list'),
-        meta: { title: '辅导员列表', icon: 'table' }
+        meta: { title: '辅导员列表', icon: 'el-icon-s-custom' }
       }
     ]
   },
@@ -93,13 +93,13 @@ export const constantRoutes = [
     component: Layout,
     redirect: '/core/class/list',
     name: 'class',
-    meta: { title: '班级', icon: 'el-icon-s-help' },
+    meta: { title: '班级', icon: 'el-icon-s-flag' },
     children: [
       {
         path: 'list',
         name: 'ClassList',
         component: () => import('@/views/core/class/list'),
-        meta: { title: '班级列表', icon: 'table' }
+        meta: { title: '班级列表', icon: 'el-icon-s-flag' }
       }
     ]
   },
@@ -125,13 +125,13 @@ export const constantRoutes = [
     component: Layout,
     redirect: '/core/dorm/list',
     name: 'dorm',
-    meta: { title: '宿舍', icon: 'el-icon-s-help' },
+    meta: { title: '宿舍', icon: 'el-icon-s-home' },
     children: [
       {
         path: 'list',
         name: 'dormList',
         component: () => import('@/views/core/dorm/list'),
-        meta: { title: '宿舍列表', icon: 'table' }
+        meta: { title: '宿舍列表', icon: 'el-icon-s-home' }
       },
       // {
       //   path: 'setting',
@@ -140,7 +140,7 @@ export const constantRoutes = [
       //   meta: { title: '宿舍设置', icon: 'table' }
       // },
     ]
-  },
+  }
 
   // {
   //   path: '/core/admin',
@@ -173,13 +173,13 @@ export const asyncRoutes = [
     component: Layout,
     redirect: '/core/admin/list',
     name: 'admin',
-    meta: { title: '管理员', icon: 'el-icon-s-help', roles: 'administrator' },
+    meta: { title: '管理员', icon: 'el-icon-orange', roles: 'administrator' },
     children: [
       {
         path: 'list',
         name: 'adminList',
         component: () => import('@/views/core/admin/list'),
-        meta: { title: '管理员列表', icon: 'table', roles: ['administrator'] }
+        meta: { title: '管理员列表', icon: 'el-icon-orange', roles: ['administrator'] }
       },
       // {
       //   path: 'setting',
@@ -190,8 +190,9 @@ export const asyncRoutes = [
     ]
   },
   // 404 page must be placed at the end !!!
-  { path: '*', redirect: '/404', hidden: true }
+  // { path: '*', redirect: '/404', hidden: true }
 ]
+asyncRoutes.push({ path: '*', redirect: '/404', hidden: true })
 
 const createRouter = () => new Router({
   // mode: 'history', // require service support
