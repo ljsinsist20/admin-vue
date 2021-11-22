@@ -24,7 +24,7 @@
 
       <el-table-column label="操作" align="center" width="200">
         <template slot-scope="scope">
-          <el-button type="danger" size="mini" @click="open(scope.row.id)">
+          <el-button type="danger" size="mini" @click="open(scope.row.id, scope.row.role)">
             删除
           </el-button>
         </template>
@@ -45,6 +45,11 @@
         </el-form-item>
         <el-form-item label="密码" prop="password">
           <el-input v-model="addForm.passWord"></el-input>
+        </el-form-item>
+         <el-form-item label="权限" prop="sex">
+          <el-select v-model="addForm.role" value-key="id">
+            <el-option v-for="item in roleArr" :key="item.id" :label="item.name" :value="item.value"></el-option>
+          </el-select>
         </el-form-item>
       </el-form>
       <!-- 底部区域 -->
@@ -67,7 +72,11 @@ export default {
       pageSize: 10,
       total: 0,
       addForm: {},
-      dialogVisible: false
+      dialogVisible: false,
+      roleArr: [
+        { id: 0, name: '超级管理员', value: 'administrator'},
+        { id: 1, name: '普通用户', value: 'common'}
+      ],
     }
   },
 
@@ -93,6 +102,7 @@ export default {
     },
 
     addBefore() {
+      this.addForm = {}
       this.dialogVisible = true
     },
 
@@ -106,7 +116,10 @@ export default {
       if (this.addForm.passWord.length < 6) {
         return this.$message.error('密码长度不能小于6位')
       }
-
+      if (this.addForm.role == null) {
+        return this.$message.error('请选择用户权限')
+      }
+ 
       adminAPI.add(this.addForm).then(response => {
         this.$message.success(response.message)
         this.dialogVisible = false
@@ -114,12 +127,29 @@ export default {
       })
     },
 
-    open(id) {
-      adminAPI.deleteById(id).then(response => {
+    open(id, role) {
+      this.$confirm('此操作将永久删除该用户记录, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(() => {
+          this.deleteById(id, role);
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          })
+        })
+    },
+
+    deleteById(id, role) {
+      adminAPI.deleteById(id, role).then(response => {
         this.$message.success(response.message)
         this.fetchData()
       })
-    }
+    },
   }
 }
 </script>

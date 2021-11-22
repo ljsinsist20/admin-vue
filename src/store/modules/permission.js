@@ -55,7 +55,7 @@ const actions = {
     return new Promise(resolve => {
       let accessedRoutes
       if (roles.includes('administrator')) {
-        //路由是否有admin,有直接全部显示
+        //路由是否有administrator,有直接全部显示
         accessedRoutes = asyncRoutes || []
       } else {
         //accessedRoutes这个就是当前角色可见的动态路由

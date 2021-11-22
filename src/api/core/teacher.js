@@ -33,5 +33,14 @@ export default {
             method: 'PUT',
             data: updateForm
         })
+    },
+
+    down(pageNum, pageSize, searchObj) {
+        return request({
+            url: `/core/teacher/down/${pageNum}/${pageSize}`,
+            method: 'GET',
+            params: searchObj,
+            responseType: 'blob'
+        })
     }
 }

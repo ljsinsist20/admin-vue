@@ -14,6 +14,9 @@
       <el-form-item>
         <el-button type="success" icon="el-icon-search" @click="addBefore()">新增</el-button>
       </el-form-item>
+      <el-form-item>
+        <el-button type="success" icon="el-icon-search" @click="down()">数据导出</el-button>
+      </el-form-item>
     </el-form>
 
     <el-table :data="list" border style="width: 100%" stripe>
@@ -211,6 +214,18 @@ export default {
         this.$message.success(response.message)
         this.updateVisible = false
         this.fetchData()
+      })
+    },
+
+    down() {
+      teacherAPI.down(this.pageNum, this.pageSize, this.searchObj).then(res => {
+        let blob = new Blob([res], { type: 'application/xlsx' })
+        let url = window.URL.createObjectURL(blob)
+        const link = document.createElement('a') //创建a标签
+        link.href = url
+        link.download = '辅导员信息.xlsx' //重命名文件
+        link.click()
+        URL.revokeObjectURL(url)
       })
     }
   }

@@ -16,9 +16,9 @@ export default {
         })
     },
 
-    deleteById(id) {
+    deleteById(id, role) {
         return request({
-            url: `/core/admin/delete/${id}`,
+            url: `/core/admin/delete/${id}/${role}`,
             method: 'DELETE'
         })
     },
