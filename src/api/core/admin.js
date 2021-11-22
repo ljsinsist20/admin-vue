@@ -22,12 +22,4 @@ export default {
             method: 'DELETE'
         })
     },
-
-    // query() {
-    //     return request({
-    //         url: '/core/admin/query',
-    //         method: 'GET'
-    //     })
-    // }
-
 }

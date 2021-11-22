@@ -21,7 +21,6 @@
           <el-tag v-if="scope.row.role === 'common'">普通用户</el-tag>
         </template>
       </el-table-column>
-
       <el-table-column label="操作" align="center" width="200">
         <template slot-scope="scope">
           <el-button type="danger" size="mini" @click="open(scope.row.id, scope.row.role)">
@@ -46,7 +45,7 @@
         <el-form-item label="密码" prop="password">
           <el-input v-model="addForm.passWord"></el-input>
         </el-form-item>
-         <el-form-item label="权限" prop="sex">
+        <el-form-item label="权限" prop="sex">
           <el-select v-model="addForm.role" value-key="id">
             <el-option v-for="item in roleArr" :key="item.id" :label="item.name" :value="item.value"></el-option>
           </el-select>
@@ -74,9 +73,9 @@ export default {
       addForm: {},
       dialogVisible: false,
       roleArr: [
-        { id: 0, name: '超级管理员', value: 'administrator'},
-        { id: 1, name: '普通用户', value: 'common'}
-      ],
+        { id: 0, name: '超级管理员', value: 'administrator' },
+        { id: 1, name: '普通用户', value: 'common' }
+      ]
     }
   },
 
@@ -119,7 +118,7 @@ export default {
       if (this.addForm.role == null) {
         return this.$message.error('请选择用户权限')
       }
- 
+
       adminAPI.add(this.addForm).then(response => {
         this.$message.success(response.message)
         this.dialogVisible = false
@@ -134,7 +133,7 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          this.deleteById(id, role);
+          this.deleteById(id, role)
         })
         .catch(() => {
           this.$message({
@@ -149,7 +148,7 @@ export default {
         this.$message.success(response.message)
         this.fetchData()
       })
-    },
+    }
   }
 }
 </script>

@@ -181,12 +181,12 @@ export const asyncRoutes = [
         component: () => import('@/views/core/admin/list'),
         meta: { title: '管理员列表', icon: 'el-icon-orange', roles: ['administrator'] }
       },
-      // {
-      //   path: 'setting',
-      //   name: 'settingList',
-      //   component: () => import('@/views/core/admin/setting'),
-      //   meta: { title: '管理员日志', icon: 'table' }
-      // }
+      {
+        path: 'setting',
+        name: 'settingList',
+        component: () => import('@/views/core/admin/setting'),
+        meta: { title: '管理员日志', icon: 'table', roles: ['administrator'] }
+      }
     ]
   },
   // 404 page must be placed at the end !!!

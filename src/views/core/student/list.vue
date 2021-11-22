@@ -31,7 +31,6 @@
       <el-form-item>
         <el-button type="success" icon="el-icon-search" @click="down()">数据导出</el-button>
       </el-form-item>
-
     </el-form>
 
     <el-table :data="list" border style="width: 100%" stripe>
