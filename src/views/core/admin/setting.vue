@@ -1,11 +1,23 @@
 <template>
   <div class="app-container">
 
-    <!-- <el-form :inline="true" class="demo-form-inline">
-      <el-form-item>
-        <el-button type="success" icon="el-icon-search" @click="addBefore()">新增</el-button>
+     <el-form :inline="true" class="demo-form-inline">
+      <el-form-item label="模块">
+        <el-input v-model="searchObj.modul" placeholder="模块"></el-input>
       </el-form-item>
-    </el-form> -->
+      <el-form-item label="操作人">
+        <el-input v-model="searchObj.desc" placeholder="操作人"></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" icon="el-icon-search" @click="fetchData()">查询</el-button>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="default" @click="resetData()">清除</el-button>
+      </el-form-item>
+      <!-- <el-form-item>
+        <el-button type="success" icon="el-icon-search" @click="down()">数据导出</el-button>
+      </el-form-item> -->
+    </el-form>
 
     <el-table :data="list" border style="width: 100%" stripe>
       <el-table-column prop="" label="#" width="50">
@@ -39,7 +51,8 @@ export default {
       list: null,
       pageNum: 1,
       pageSize: 10,
-      total: 0
+      total: 0,
+      searchObj: {},
     }
   },
 
@@ -49,7 +62,7 @@ export default {
 
   methods: {
     fetchData() {
-      logAPI.list(this.pageNum, this.pageSize).then(response => {
+      logAPI.list(this.pageNum, this.pageSize, this.searchObj).then(response => {
         ;(this.list = response.data.pageInfo.list), (this.total = response.data.pageInfo.total)
       })
     },
@@ -62,7 +75,12 @@ export default {
     changePageSize(pageSize) {
       this.pageSize = pageSize
       this.fetchData()
-    }
+    },
+
+    resetData() {
+      this.searchObj = {}
+      this.fetchData()
+    },
   }
 }
 </script>
