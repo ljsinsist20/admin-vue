@@ -21,11 +21,24 @@
           <el-tag v-if="scope.row.role === 'common'">普通用户</el-tag>
         </template>
       </el-table-column>
+
+      <el-table-column prop="state" label="用户状态">
+        <template slot-scope="scope">
+          <el-tag v-if="scope.row.state === 0" type="warning">正常</el-tag>
+          <el-tag v-if="scope.row.state === 1" type="danger">锁定</el-tag>
+        </template>
+      </el-table-column>
+
       <el-table-column label="操作" align="center" width="200">
         <template slot-scope="scope">
           <el-button type="danger" size="mini" @click="open(scope.row.id, scope.row.role)">
             删除
           </el-button>
+          <el-tag v-if="scope.row.state === 1" type="danger">
+            <el-button type="warning" size="mini" @click="updateState(scope.row.id, scope.row.userName)">
+              解锁
+            </el-button>
+          </el-tag>
         </template>
       </el-table-column>
     </el-table>
@@ -145,6 +158,13 @@ export default {
 
     deleteById(id, role) {
       adminAPI.deleteById(id, role).then(response => {
+        this.$message.success(response.message)
+        this.fetchData()
+      })
+    },
+
+    updateState(id, userName) {
+      adminAPI.updateState(id, userName).then(response => {
         this.$message.success(response.message)
         this.fetchData()
       })

@@ -22,4 +22,11 @@ export default {
             method: 'DELETE'
         })
     },
+
+    updateState(id, userName) {
+        return request({
+            url: `/core/admin/update/${id}/${userName}`,
+            method: 'PUT'
+        })
+    }
 }
