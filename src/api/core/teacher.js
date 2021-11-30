@@ -42,5 +42,13 @@ export default {
             params: searchObj,
             responseType: 'blob'
         })
+    },
+
+    addExcel(formData) {
+        return request({
+            url: `/core/teacher/addExcel`,
+            method: 'POST',
+            data: formData
+        })
     }
 }

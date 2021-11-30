@@ -14,6 +14,10 @@
       <el-form-item>
         <el-button type="success" icon="el-icon-search" @click="addBefore()">新增</el-button>
       </el-form-item>
+      <el-form-item>
+        <input ref="file" type="file" accept=".xlsx,.xls" style="display: none;" @change="uploadFile">
+        <el-button type="primary" icon="el-icon-download" @click="clickFile">导入数据</el-button>
+      </el-form-item>
     </el-form>
 
     <el-table :data="list" border style="width: 100%" stripe>
@@ -170,6 +174,35 @@ export default {
         this.updateVisible = false
         this.fetchData()
       })
+    },
+
+    clickFile() {
+      this.$refs.file.dispatchEvent(new MouseEvent('click'))
+    },
+    // 导入数据
+    uploadFile() {
+      const file = this.$refs.file.files
+      var extName = file[0].name.substring(file[0].name.lastIndexOf('.')).toLowerCase()
+      // var username = this.$store.getters.name
+      if (extName === '.xlsx' || extName === '.xls') {
+        var formData = new FormData()
+        formData.append('file', file[0])
+        // formData.append('username', username)
+        dormAPI
+          .addExcel(formData)
+          .then(res => {
+            this.$message({
+              type: 'success',
+              message: '数据导入成功!'
+            })
+            this.fetchData()
+          })
+          .catch(err => {
+            this.$message.error('数据导入失败!ERR:' + err)
+          })
+      } else {
+        this.$message.error('数据导入失败，请选择正确的xlsx模板文件')
+      }
     }
   }
 }
