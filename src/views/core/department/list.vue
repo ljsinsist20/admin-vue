@@ -185,8 +185,12 @@ export default {
         departmentAPI
           .addExcel(formData)
           .then(response => {
-            this.$message.success(response.message)
-            this.fetchData()
+              if(response.code === -213) {
+              this.$message.error(response.message)
+            }else{
+              this.$message.success(response.message)
+              this.fetchData()
+            }
           })
           // .catch(err => {
           //   this.$message.error('数据导入失败!ERR:' + err)
