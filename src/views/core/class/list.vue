@@ -242,7 +242,7 @@ export default {
       })
     },
 
-        clickFile() {
+    clickFile() {
       this.$refs.file.dispatchEvent(new MouseEvent('click'))
     },
     // 导入数据
