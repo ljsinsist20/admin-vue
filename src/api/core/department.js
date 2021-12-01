@@ -33,5 +33,12 @@ export default {
             method: 'PUT',
             data: updateForm
         })
+    },
+    addExcel(formData) {
+        return request({
+            url: `/core/department/addExcel`,
+            method: 'POST',
+            data: formData
+        })
     }
 }

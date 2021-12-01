@@ -190,16 +190,13 @@ export default {
         // formData.append('username', username)
         dormAPI
           .addExcel(formData)
-          .then(res => {
-            this.$message({
-              type: 'success',
-              message: '数据导入成功!'
-            })
+          .then(response => {
+            this.$message.success(response.message)
             this.fetchData()
           })
-          .catch(err => {
-            this.$message.error('数据导入失败!ERR:' + err)
-          })
+          // .catch(err => {
+          //   this.$message.error('数据导入失败!ERR:' + err)
+          // })
       } else {
         this.$message.error('数据导入失败，请选择正确的xlsx模板文件')
       }
